@@ -1,25 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from 'theme-ui';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import { QueryClientProvider, QueryClient } from 'react-query';
+
+import { PokemonPage } from './pages';
+import { PokemonWithReactQuery } from './pages';
+
+import { theme } from './theme/theme';
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <ul>
+            <li><Link to="/pokemon/25">Pikachu</Link></li>
+            <li><Link to="/pokemon/150">Mewtwo</Link></li>
+          </ul>
+          <Switch>
+            <Route path="/chinpokomon/:id">
+              <PokemonPage />
+            </Route>
+            <Route path="/pokemon/:id">
+              <PokemonWithReactQuery />
+            </Route>
+          </Switch>
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
